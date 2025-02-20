@@ -1,4 +1,4 @@
-// You should NOT be constructing 
+// You should NOT be constructing
 // a new ticket, so you should never use this directly.
 #[derive(Debug)]
 struct Ticket;
@@ -9,7 +9,7 @@ struct Person {
 }
 
 fn main() {
-    let entry_pass = Ticket; 
+    let entry_pass = Ticket;
     let shrey_name = String::from("shrey");
     let tom_name = String::from("tom");
 
@@ -18,22 +18,21 @@ fn main() {
     let tom_upper_name = to_uppercase(tom_name);
 
     let shrey = Person {
-        name: shrey_name,
+        name: shrey_upper_name,
         ticket: Some(entry_pass),
     };
 
     let tom = Person {
-        name: tom_name,
+        name: tom_upper_name,
         ticket: None,
     };
 
-    move_ticket(shrey, tom);
+    let (shrey, tom) = move_ticket(shrey, tom);
 
     // do not change these lines
     println!("{} ticket: {:?}", shrey.name, shrey.ticket);
     println!("{} ticket: {:?}", tom.name, tom.ticket);
 }
-
 
 fn to_uppercase(s: String) -> String {
     s.to_uppercase()
@@ -41,14 +40,24 @@ fn to_uppercase(s: String) -> String {
 
 // Do not change the function signature
 fn move_ticket(mut from: Person, mut to: Person) -> (Person, Person) {
-    to = Some(Person {
-        name: to.name,
-        ticket: from.ticket
-    });
-    from = Some(Person {
-        name: from.name,
-        ticket: None
-    });
-    
-    (from, to)
+    let Person {
+        name: from_name,
+        ticket: from_ticket,
+    } = from;
+    let Person {
+        name: to_name,
+        ticket: _,
+    } = to;
+
+    let new_from = Person {
+        name: from_name,
+        ticket: None,
+    };
+
+    let new_to = Person {
+        name: to_name,
+        ticket: from_ticket,
+    };
+
+    (new_from, new_to)
 }
